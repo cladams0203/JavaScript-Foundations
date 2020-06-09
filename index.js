@@ -36,20 +36,29 @@ When your math is correct, monthlyRate will equal 1073.64
 */
 const monthlyPayment =
   principal *
-  (
-    (monthlyInterestRate * Math.pow(1 + monthlyInterestRate, periods)) /
-    (Math.pow(1 + monthlyInterestRate, periods) - 1)
-  ).toFixed(2);
+  ((monthlyInterestRate * Math.pow(1 + monthlyInterestRate, periods)) /
+    (Math.pow(1 + monthlyInterestRate, periods) - 1));
 console.log(monthlyPayment.toFixed(2));
 // 🏡 Task 3: Function
 /* Create a function called `mortgageCalculator` that combines all of the steps from task 1 and 2 and returns a sentence "{Name}, your monthly rate is ${monthlyRate}"
 
 If your name is `Oscar` mortgageCalculator() should return "Oscar, your monthly rate is 1073.64"
 */
-const mortgageCalculator = () => {
-  return `${name}, your monthly rate is ${monthlyPayment}`;
+const mortgageCalculator = (name, principal, interest_rate, years, score) => {
+  let monthlyInterestRate = interest_rate / 12;
+  if (score > 740) {
+    monthlyInterestRate = monthlyInterestRate * 0.95;
+  } else if (score < 660) {
+    monthlyInterestRate = monthlyInterestRate * 1.05;
+  }
+  const periods = years * 12;
+  const monthlyPayment =
+    principal *
+    ((monthlyInterestRate * Math.pow(1 + monthlyInterestRate, periods)) /
+      (Math.pow(1 + monthlyInterestRate, periods) - 1));
+  return `${name}, your monthly rate is ${monthlyPayment.toFixed(2)}`;
 };
-console.log(mortgageCalculator());
+console.log(mortgageCalculator("John", 200000, 0.05, 30, 780));
 // 🏡 Task 4: Arguments and Parameters
 /* Substitute the variables in your functions for parameters such that you can substitute `P`, `I`, and `N` when you call the function.
 
@@ -80,6 +89,25 @@ For example, variableInterestRate(200000, 0.04, 30) should console.log:
 "{Name}, with an interest rate of 0.055, your monthly rate is $1136"
 "{Name}, with an interest rate of 0.06, your monthly rate is $1199"
 */
+const variableInterestRate = (name, principal, interest_rate, years, score) => {
+  let variableInterest = interest_rate - 0.02;
+  for (let i = 0; i < 9; i++) {
+    const rate = mortgageCalculator(
+      name,
+      principal,
+      variableInterest,
+      years,
+      score
+    );
+    console.log(
+      `${name}, with an interest rate of ${variableInterest.toFixed(
+        3
+      )}, your monthly rate is ${rate}`
+    );
+    variableInterest = variableInterest + 0.005;
+  }
+};
+variableInterestRate("matt", 200000, 0.04, 30, 700);
 
 // 🌟🌟🌟 STRETCH 🌟🌟🌟//
 
